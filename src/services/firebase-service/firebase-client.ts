@@ -19,4 +19,5 @@ const app = initializeApp(firebaseConfig);
 // Auth instance - represents the connection to the Firebase Authentication service
 export const auth = getAuth(app);
 
+// Firestore instance - represents the connection to the Firestore service
 export const firestore = getFirestore(app);
