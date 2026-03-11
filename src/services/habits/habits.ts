@@ -7,6 +7,8 @@ export async function createHabit(userId: string, name: string) {
   await addDoc(habitsCollectionRef, { name, createdAt: serverTimestamp() });
 }
 
+export async function getHabit(userId: string) {}
+
 // Habit service layer
 
 /*
