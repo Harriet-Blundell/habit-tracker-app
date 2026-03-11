@@ -4,7 +4,7 @@ import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 export async function createHabit(userId: string, name: string) {
   const habitsCollectionRef = collection(firestore, "users", userId, "habits");
 
-  await addDoc(habitsCollectionRef, { name, createdAt: serverTimestamp });
+  await addDoc(habitsCollectionRef, { name, createdAt: serverTimestamp() });
 }
 
 // Habit service layer
