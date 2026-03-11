@@ -12,7 +12,7 @@ export type HabitType = {
 
 export default function Home() {
   const { user, loading } = useAuth();
-  const [habitInput, setHabitInput] = useState("");
+  const [habitValue, setHabitValue] = useState("");
   const [habits, setHabits] = useState<HabitType[]>([]);
 
   useEffect(() => {
@@ -39,22 +39,22 @@ export default function Home() {
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    setHabitInput(value);
+    setHabitValue(value);
   };
 
   const handleSubmit = async () => {
-    const trimHabitInput = habitInput.trim();
+    const trimHabitValue = habitValue.trim();
     if (!user) return;
-    if (!trimHabitInput) return;
+    if (!trimHabitValue) return;
 
     try {
-      const createdHabit = await createHabit(user.uid, trimHabitInput);
-      setHabitInput("");
+      const createdHabit = await createHabit(user.uid, trimHabitValue);
+      setHabitValue("");
       setHabits((prev) => [
         ...prev,
         {
           id: createdHabit.id,
-          name: trimHabitInput,
+          name: trimHabitValue,
         },
       ]);
     } catch (error) {
@@ -87,7 +87,7 @@ export default function Home() {
           className="my-4 w-full max-w-xs rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Add habit here..."
           onChange={handleOnChange}
-          value={habitInput}
+          value={habitValue}
           required
         />
         <button
