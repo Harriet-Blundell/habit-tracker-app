@@ -63,9 +63,20 @@ export default function Home() {
     }
   };
 
-  const handleUpdateHabit = async (habitId: string, completed: boolean) => {
+  const handleUpdateHabit = async (habitId: string, checked: boolean) => {
     if (!user) return;
-    await updateHabitCompletion(user?.uid, habitId, completed);
+    await updateHabitCompletion(user?.uid, habitId, checked);
+
+    setHabits((prev) =>
+      prev.map((habit) =>
+        habit.id === habitId
+          ? {
+              ...habit,
+              completed: checked,
+            }
+          : habit
+      )
+    );
   };
 
   if (loading) return <p>Loading...</p>;
