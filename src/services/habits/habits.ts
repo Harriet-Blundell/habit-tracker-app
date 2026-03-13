@@ -6,6 +6,7 @@ import {
   serverTimestamp,
   doc,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 
 export type HabitType = {
@@ -49,6 +50,11 @@ export async function updateHabitCompletion(
   const docRef = doc(firestore, "users", userId, "habits", habitId);
 
   await updateDoc(docRef, { completed });
+}
+
+export async function deleteHabit(userId: string, habitId: string) {
+  const docRef = doc(firestore, "users", userId, "habits", habitId);
+  await deleteDoc(docRef);
 }
 
 // Habit service layer
