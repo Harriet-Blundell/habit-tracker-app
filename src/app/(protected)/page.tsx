@@ -2,13 +2,13 @@
 
 import { signOutUser } from "@/services/auth/auth";
 import { useAuth } from "@/services/auth/AuthProvider";
-import { createHabit, getHabits } from "@/services/habits/habits";
+import {
+  createHabit,
+  getHabits,
+  HabitType,
+  updateHabitCompletion,
+} from "@/services/habits/habits";
 import { useEffect, useState } from "react";
-
-export type HabitType = {
-  id: string;
-  name: string;
-};
 
 export default function Home() {
   const { user, loading } = useAuth();
@@ -55,11 +55,17 @@ export default function Home() {
         {
           id: createdHabit.id,
           name: trimHabitValue,
+          completed: false,
         },
       ]);
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleUpdateHabit = async (habitId: string, completed: boolean) => {
+    if (!user) return;
+    await updateHabitCompletion(user?.uid, habitId, completed);
   };
 
   if (loading) return <p>Loading...</p>;
@@ -77,7 +83,19 @@ export default function Home() {
       {/* Habits data */}
       <div>
         {habits.map((habit) => {
-          return <p key={habit.id}>{habit.name}</p>;
+          return (
+            <div key={habit.id}>
+              <input
+                type="checkbox"
+                checked={habit.completed}
+                onChange={(e) => {
+                  const { checked } = e.target;
+                  handleUpdateHabit(habit.id, checked);
+                }}
+              />{" "}
+              {habit.name}
+            </div>
+          );
         })}
       </div>
 
