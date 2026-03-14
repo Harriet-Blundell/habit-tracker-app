@@ -9,7 +9,9 @@ import {
   HabitType,
   updateHabitCompletion,
 } from "@/services/habits/habits";
+import { formatTodaysDate } from "@/utils/formatDate";
 import { useEffect, useState } from "react";
+import moment from "moment";
 
 export default function Home() {
   const { user, loading } = useAuth();
@@ -67,6 +69,8 @@ export default function Home() {
   const handleUpdateHabit = async (habitId: string, checked: boolean) => {
     if (!user) return;
     await updateHabitCompletion(user?.uid, habitId, checked);
+
+    formatTodaysDate(new Date());
 
     setHabits((prev) =>
       prev.map((habit) =>
