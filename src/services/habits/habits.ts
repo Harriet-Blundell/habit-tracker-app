@@ -7,6 +7,7 @@ import {
   doc,
   updateDoc,
   deleteDoc,
+  setDoc,
 } from "firebase/firestore";
 
 export type HabitType = {
@@ -50,6 +51,32 @@ export async function updateHabitCompletion(
   const docRef = doc(firestore, "users", userId, "habits", habitId);
 
   await updateDoc(docRef, { completed });
+}
+
+export async function setHabitCheckin(
+  userId: string,
+  habitId: string,
+  date: string,
+  checked: boolean
+) {
+  const checkinDoc = doc(
+    firestore,
+    "users",
+    userId,
+    "habits",
+    habitId,
+    "checkins",
+    date
+  );
+
+  if (checked) {
+    await setDoc(checkinDoc, {
+      date,
+      completed: true,
+    });
+  } else {
+    await deleteDoc(checkinDoc);
+  }
 }
 
 export async function deleteHabit(userId: string, habitId: string) {
