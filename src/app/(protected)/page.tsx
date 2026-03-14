@@ -4,6 +4,7 @@ import { signOutUser } from "@/services/auth/auth";
 import { useAuth } from "@/services/auth/AuthProvider";
 import {
   createHabit,
+  deleteHabit,
   getHabits,
   HabitType,
   updateHabitCompletion,
@@ -79,6 +80,13 @@ export default function Home() {
     );
   };
 
+  const handleDeleteHabit = async (habitId: string) => {
+    if (!user) return;
+    await deleteHabit(user?.uid, habitId);
+
+    setHabits((prev) => prev.filter((habit) => habit.id !== habitId));
+  };
+
   if (loading) return <p>Loading...</p>;
 
   return (
@@ -95,7 +103,7 @@ export default function Home() {
       <div>
         {habits.map((habit) => {
           return (
-            <div key={habit.id}>
+            <div key={habit.id} className="flex items-center gap-3 py-2">
               <input
                 type="checkbox"
                 checked={habit.completed}
@@ -103,8 +111,21 @@ export default function Home() {
                   const { checked } = e.target;
                   handleUpdateHabit(habit.id, checked);
                 }}
-              />{" "}
-              {habit.name}
+                className="w-5 h-5 accent-blue-500 rounded-full focus:ring-0 focus:ring-blue-500 border border-gray-300"
+              />
+              <span
+                className={
+                  habit.completed ? "line-through text-gray-400" : "text-white"
+                }
+              >
+                {habit.name}
+              </span>
+              <button
+                className="ml-auto bg-red-500 text-white rounded px-3 py-1 hover:bg-red-600 transition"
+                onClick={() => handleDeleteHabit(habit.id)}
+              >
+                Delete
+              </button>
             </div>
           );
         })}
