@@ -109,7 +109,7 @@ export default function Home() {
 
   const handleDeleteHabit = async (habitId: string) => {
     if (!user) return;
-    await deleteHabit(user?.uid, habitId);
+    await deleteHabit(user.uid, habitId);
 
     setHabits((prev) => prev.filter((habit) => habit.id !== habitId));
   };
