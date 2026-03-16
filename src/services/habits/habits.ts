@@ -60,7 +60,7 @@ export async function setHabitCheckin(
   if (checked) {
     await setDoc(checkinDoc, {
       date,
-      completedToday: true,
+      completed: true,
     });
   } else {
     await deleteDoc(checkinDoc);
