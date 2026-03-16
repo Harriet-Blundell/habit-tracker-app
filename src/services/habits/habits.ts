@@ -5,15 +5,14 @@ import {
   collection,
   serverTimestamp,
   doc,
-  updateDoc,
   deleteDoc,
   setDoc,
+  getDoc,
 } from "firebase/firestore";
 
 export type HabitType = {
   id: string;
   name: string;
-  completed: boolean;
 };
 
 export async function createHabit(userId: string, name: string) {
@@ -22,7 +21,6 @@ export async function createHabit(userId: string, name: string) {
   const habit = await addDoc(habitsCollectionRef, {
     name,
     createdAt: serverTimestamp(),
-    completed: false,
   });
 
   return habit;
@@ -41,16 +39,6 @@ export async function getHabits(userId: string): Promise<HabitType[]> {
   });
 
   return habitData as HabitType[];
-}
-
-export async function updateHabitCompletion(
-  userId: string,
-  habitId: string,
-  completed: boolean
-) {
-  const docRef = doc(firestore, "users", userId, "habits", habitId);
-
-  await updateDoc(docRef, { completed });
 }
 
 export async function setHabitCheckin(
@@ -72,7 +60,7 @@ export async function setHabitCheckin(
   if (checked) {
     await setDoc(checkinDoc, {
       date,
-      completed: true,
+      completedToday: true,
     });
   } else {
     await deleteDoc(checkinDoc);
@@ -82,6 +70,26 @@ export async function setHabitCheckin(
 export async function deleteHabit(userId: string, habitId: string) {
   const docRef = doc(firestore, "users", userId, "habits", habitId);
   await deleteDoc(docRef);
+}
+
+export async function getHabitCheckInExists(
+  userId: string,
+  habitId: string,
+  date: string
+): Promise<boolean> {
+  const docRef = doc(
+    firestore,
+    "users",
+    userId,
+    "habits",
+    habitId,
+    "checkins",
+    date
+  );
+
+  const snapshot = await getDoc(docRef);
+
+  return snapshot.exists();
 }
 
 // Habit service layer

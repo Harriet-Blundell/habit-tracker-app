@@ -5,25 +5,47 @@ import { useAuth } from "@/services/auth/AuthProvider";
 import {
   createHabit,
   deleteHabit,
+  getHabitCheckInExists,
   getHabits,
-  HabitType,
-  updateHabitCompletion,
+  setHabitCheckin,
 } from "@/services/habits/habits";
 import { formatTodaysDate } from "@/utils/formatDate";
 import { useEffect, useState } from "react";
-import moment from "moment";
+
+type HabitWithTodayStatus = {
+  id: string;
+  name: string;
+  completedToday: boolean;
+};
 
 export default function Home() {
   const { user, loading } = useAuth();
   const [habitValue, setHabitValue] = useState("");
-  const [habits, setHabits] = useState<HabitType[]>([]);
+  const [habits, setHabits] = useState<HabitWithTodayStatus[]>([]);
 
   useEffect(() => {
     if (!user) return;
     const fetchHabits = async () => {
       try {
         const habits = await getHabits(user.uid);
-        setHabits(habits);
+        const date = formatTodaysDate(new Date());
+
+        const enrichedHabits = await Promise.all(
+          habits.map(async (habit) => {
+            const exists = await getHabitCheckInExists(
+              user.uid,
+              habit.id,
+              date
+            );
+
+            return {
+              ...habit,
+              completedToday: exists,
+            };
+          })
+        );
+
+        setHabits(enrichedHabits);
       } catch (error) {
         console.error(error);
       }
@@ -58,7 +80,7 @@ export default function Home() {
         {
           id: createdHabit.id,
           name: trimHabitValue,
-          completed: false,
+          completedToday: false,
         },
       ]);
     } catch (error) {
@@ -68,16 +90,17 @@ export default function Home() {
 
   const handleUpdateHabit = async (habitId: string, checked: boolean) => {
     if (!user) return;
-    await updateHabitCompletion(user?.uid, habitId, checked);
 
-    formatTodaysDate(new Date());
+    const today = formatTodaysDate(new Date());
+
+    await setHabitCheckin(user.uid, habitId, today, checked);
 
     setHabits((prev) =>
       prev.map((habit) =>
         habit.id === habitId
           ? {
               ...habit,
-              completed: checked,
+              completedToday: checked,
             }
           : habit
       )
@@ -110,7 +133,7 @@ export default function Home() {
             <div key={habit.id} className="flex items-center gap-3 py-2">
               <input
                 type="checkbox"
-                checked={habit.completed}
+                checked={habit.completedToday}
                 onChange={(e) => {
                   const { checked } = e.target;
                   handleUpdateHabit(habit.id, checked);
@@ -119,7 +142,9 @@ export default function Home() {
               />
               <span
                 className={
-                  habit.completed ? "line-through text-gray-400" : "text-white"
+                  habit.completedToday
+                    ? "line-through text-gray-400"
+                    : "text-white"
                 }
               >
                 {habit.name}
