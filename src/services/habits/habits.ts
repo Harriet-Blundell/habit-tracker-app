@@ -109,6 +109,26 @@ export async function getHabitCheckInExists(
   return snapshot.exists();
 }
 
+export async function getHabitCheckinDates(
+  userId: string,
+  habitId: string
+): Promise<string[]> {
+  const habitCheckinDatesCollectionRef = collection(
+    firestore,
+    "users",
+    userId,
+    "habits",
+    habitId,
+    "checkins"
+  );
+
+  const snapshot = await getDocs(habitCheckinDatesCollectionRef);
+
+  return snapshot.docs.map((doc) => {
+    return doc.id;
+  });
+}
+
 // Habit service layer
 
 /*
