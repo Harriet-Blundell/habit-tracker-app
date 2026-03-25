@@ -68,8 +68,25 @@ export async function setHabitCheckin(
 }
 
 export async function deleteHabit(userId: string, habitId: string) {
-  const docRef = doc(firestore, "users", userId, "habits", habitId);
-  await deleteDoc(docRef);
+  const habitCheckinsCollectionRef = collection(
+    firestore,
+    "users",
+    userId,
+    "habits",
+    habitId,
+    "checkins"
+  ); // getting the check-ins collection reference
+
+  const snapshots = await getDocs(habitCheckinsCollectionRef); // fetching the check-in docs
+
+  await Promise.all(
+    snapshots.docs.map((doc) => {
+      return deleteDoc(doc.ref);
+    })
+  ); // deleting the check-in docs in parallel
+
+  const habitDocRef = doc(firestore, "users", userId, "habits", habitId);
+  await deleteDoc(habitDocRef);
 }
 
 export async function getHabitCheckInExists(
