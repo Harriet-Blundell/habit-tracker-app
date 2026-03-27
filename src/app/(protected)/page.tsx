@@ -166,6 +166,7 @@ export default function Home() {
               >
                 {habit.name}
               </span>
+              {habit.streak > 0 && <span>🔥 {habit.streak}</span>}
               <button
                 className="ml-auto bg-red-500 text-white rounded px-3 py-1 hover:bg-red-600 transition"
                 onClick={() => handleDeleteHabit(habit.id)}
