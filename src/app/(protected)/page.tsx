@@ -5,10 +5,12 @@ import { useAuth } from "@/services/auth/AuthProvider";
 import {
   createHabit,
   deleteHabit,
+  getHabitCheckinDates,
   getHabitCheckInExists,
   getHabits,
   setHabitCheckin,
 } from "@/services/habits/habits";
+import { calculateStreak } from "@/utils/calculateStreak";
 import { formatTodaysDate } from "@/utils/formatDate";
 import { useEffect, useState } from "react";
 
@@ -16,6 +18,7 @@ type HabitWithTodayStatus = {
   id: string;
   name: string;
   completedToday: boolean;
+  streak: number;
 };
 
 export default function Home() {
@@ -38,9 +41,17 @@ export default function Home() {
               date
             );
 
+            const habitCheckinDates = await getHabitCheckinDates(
+              user.uid,
+              habit.id
+            );
+
+            const streak = calculateStreak(habitCheckinDates);
+
             return {
               ...habit,
               completedToday: exists,
+              streak,
             };
           })
         );
@@ -81,6 +92,7 @@ export default function Home() {
           id: createdHabit.id,
           name: trimHabitValue,
           completedToday: false,
+          streak: 0,
         },
       ]);
     } catch (error) {
@@ -95,12 +107,17 @@ export default function Home() {
 
     await setHabitCheckin(user.uid, habitId, today, checked);
 
+    const habitCheckinDates = await getHabitCheckinDates(user.uid, habitId);
+
+    const streak = calculateStreak(habitCheckinDates);
+
     setHabits((prev) =>
       prev.map((habit) =>
         habit.id === habitId
           ? {
               ...habit,
               completedToday: checked,
+              streak,
             }
           : habit
       )
