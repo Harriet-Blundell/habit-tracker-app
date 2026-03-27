@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import Habit from "../components/Habit";
 import { Header } from "../components/Header";
 import { AddHabit } from "../components/AddHabit";
+import { SignOut } from "../components/SignOut";
 
 type HabitWithTodayStatus = {
   id: string;
@@ -166,14 +167,7 @@ export default function Home() {
       />
 
       {/* Bottom: Sign out */}
-      <div className="flex flex-col items-center mb-8">
-        <button
-          className="w-full max-w-xs bg-gray-500 text-white rounded p-2 hover:bg-gray-600 transition"
-          onClick={handleSignOut}
-        >
-          Sign out
-        </button>
-      </div>
+      <SignOut handleSignOut={handleSignOut} />
     </div>
   );
 }
