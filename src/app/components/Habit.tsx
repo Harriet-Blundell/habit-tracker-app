@@ -1,20 +1,13 @@
+import { HabitWithTodayStatus } from "../(protected)/page";
+
 type HabitProps = {
-  id: string;
-  name: string;
-  completedToday: boolean;
-  streak: number;
-  handleUpdateHabit: (id: string, checked: boolean) => Promise<void>;
-  handleDeleteHabit: (id: string) => Promise<void>;
+  habit: HabitWithTodayStatus;
+  onToggle: (habitId: string, checked: boolean) => void;
+  onDelete: (habitId: string) => void;
 };
 
-export default function Habit({
-  id,
-  name,
-  completedToday,
-  streak,
-  handleUpdateHabit,
-  handleDeleteHabit,
-}: HabitProps) {
+export default function Habit({ habit, onToggle, onDelete }: HabitProps) {
+  const { id, completedToday, name, streak } = habit;
   return (
     <div key={id} className="flex items-center gap-3 py-2">
       <input
@@ -22,7 +15,7 @@ export default function Habit({
         checked={completedToday}
         onChange={(e) => {
           const { checked } = e.target;
-          handleUpdateHabit(id, checked);
+          onToggle(id, checked);
         }}
         className="w-5 h-5 accent-blue-500 rounded-full focus:ring-0 focus:ring-blue-500 border border-gray-300"
       />
@@ -41,7 +34,7 @@ export default function Habit({
       )}
       <button
         className="ml-auto shrink-0 bg-red-500 text-white rounded px-3 py-1 hover:bg-red-600 transition"
-        onClick={() => handleDeleteHabit(id)}
+        onClick={() => onDelete(id)}
       >
         Delete
       </button>

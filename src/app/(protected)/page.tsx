@@ -18,7 +18,7 @@ import { Header } from "../components/Header";
 import { AddHabit } from "../components/AddHabit";
 import { SignOut } from "../components/SignOut";
 
-type HabitWithTodayStatus = {
+export type HabitWithTodayStatus = {
   id: string;
   name: string;
   completedToday: boolean;
@@ -148,12 +148,9 @@ export default function Home() {
           return (
             <Habit
               key={habit.id}
-              id={habit.id}
-              name={habit.name}
-              completedToday={habit.completedToday}
-              streak={habit.streak}
-              handleUpdateHabit={handleUpdateHabit}
-              handleDeleteHabit={handleDeleteHabit}
+              habit={habit}
+              onToggle={handleUpdateHabit}
+              onDelete={handleDeleteHabit}
             />
           );
         })}
