@@ -14,6 +14,7 @@ import { calculateStreak } from "@/utils/calculateStreak";
 import { formatTodaysDate } from "@/utils/formatDate";
 import { useEffect, useState } from "react";
 import Habit from "../components/Habit";
+import { Header } from "../components/Header";
 
 type HabitWithTodayStatus = {
   id: string;
@@ -136,13 +137,8 @@ export default function Home() {
 
   return (
     <div className="flex flex-col h-screen justify-between px-4 max-w-md mx-auto w-full">
-      {/* Top: Hello */}
-      <div className="flex flex-col items-center mt-8">
-        <p className="text-lg md:text-xl font-semibold">Hello,</p>
-        <p className="text-lg md:text-xl font-semibold mt-1 text-center">
-          {user?.displayName}
-        </p>
-      </div>
+      {/* Top: Greeting */}
+      <Header displayName={user?.displayName ?? ""} />
 
       {/* Habits data */}
       <div>
