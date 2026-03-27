@@ -1,8 +1,4 @@
-type AddHabitProps = {
-  habitValue: string;
-  handleOnChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleSubmit: () => void;
-};
+import { AddHabitProps } from "@/types/habits";
 
 export function AddHabit({
   habitValue,

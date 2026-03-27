@@ -1,15 +1,9 @@
-import { HabitWithTodayStatus } from "../(protected)/page";
-
-type HabitProps = {
-  habit: HabitWithTodayStatus;
-  onToggle: (habitId: string, checked: boolean) => void;
-  onDelete: (habitId: string) => void;
-};
+import { HabitProps } from "@/types/habits";
 
 export default function Habit({ habit, onToggle, onDelete }: HabitProps) {
   const { id, completedToday, name, streak } = habit;
   return (
-    <div key={id} className="flex items-center gap-3 py-2">
+    <div className="flex items-center gap-3 py-2">
       <input
         type="checkbox"
         checked={completedToday}

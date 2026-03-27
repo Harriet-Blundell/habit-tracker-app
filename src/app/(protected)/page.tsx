@@ -17,13 +17,7 @@ import Habit from "../components/Habit";
 import { Header } from "../components/Header";
 import { AddHabit } from "../components/AddHabit";
 import { SignOut } from "../components/SignOut";
-
-export type HabitWithTodayStatus = {
-  id: string;
-  name: string;
-  completedToday: boolean;
-  streak: number;
-};
+import { HabitWithTodayStatus } from "@/types/habits";
 
 export default function Home() {
   const { user, loading } = useAuth();
