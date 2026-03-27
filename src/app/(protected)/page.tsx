@@ -13,6 +13,7 @@ import {
 import { calculateStreak } from "@/utils/calculateStreak";
 import { formatTodaysDate } from "@/utils/formatDate";
 import { useEffect, useState } from "react";
+import Habit from "../components/Habit";
 
 type HabitWithTodayStatus = {
   id: string;
@@ -147,33 +148,15 @@ export default function Home() {
       <div>
         {habits.map((habit) => {
           return (
-            <div key={habit.id} className="flex items-center gap-3 py-2">
-              <input
-                type="checkbox"
-                checked={habit.completedToday}
-                onChange={(e) => {
-                  const { checked } = e.target;
-                  handleUpdateHabit(habit.id, checked);
-                }}
-                className="w-5 h-5 accent-blue-500 rounded-full focus:ring-0 focus:ring-blue-500 border border-gray-300"
-              />
-              <span
-                className={
-                  habit.completedToday
-                    ? "line-through text-gray-400"
-                    : "text-white"
-                }
-              >
-                {habit.name}
-              </span>
-              {habit.streak > 0 && <span>🔥 {habit.streak}</span>}
-              <button
-                className="ml-auto bg-red-500 text-white rounded px-3 py-1 hover:bg-red-600 transition"
-                onClick={() => handleDeleteHabit(habit.id)}
-              >
-                Delete
-              </button>
-            </div>
+            <Habit
+              key={habit.id}
+              id={habit.id}
+              name={habit.name}
+              completedToday={habit.completedToday}
+              streak={habit.streak}
+              handleUpdateHabit={handleUpdateHabit}
+              handleDeleteHabit={handleDeleteHabit}
+            />
           );
         })}
       </div>
