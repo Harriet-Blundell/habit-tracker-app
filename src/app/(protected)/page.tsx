@@ -23,6 +23,8 @@ export default function Home() {
   const { user, loading } = useAuth();
   const [habitValue, setHabitValue] = useState("");
   const [habits, setHabits] = useState<HabitWithTodayStatus[]>([]);
+  const [selectedHabitId, setSelectedHabitId] = useState<string | null>("");
+  const [habitHistoryDates, setHabitHistoryDates] = useState<string[]>([]);
 
   useEffect(() => {
     if (!user) return;
