@@ -37,6 +37,7 @@ export default function Habit({
       >
         Delete
       </button>
+      <button onClick={() => onViewHistory(id)}>View history</button>
     </div>
   );
 }
