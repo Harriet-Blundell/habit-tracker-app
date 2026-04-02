@@ -1,6 +1,11 @@
 import { HabitProps } from "@/types/habits";
 
-export default function Habit({ habit, onToggle, onDelete }: HabitProps) {
+export default function Habit({
+  habit,
+  onToggle,
+  onDelete,
+  onViewHistory,
+}: HabitProps) {
   const { id, completedToday, name, streak } = habit;
   return (
     <div className="flex items-center gap-3 py-2">

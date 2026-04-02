@@ -131,6 +131,16 @@ export default function Home() {
     setHabits((prev) => prev.filter((habit) => habit.id !== habitId));
   };
 
+  const handleViewHistory = async (habitId: string) => {
+    if (!user) return;
+
+    setSelectedHabitId(habitId);
+
+    const dates = await getHabitCheckinDates(user.uid, habitId);
+
+    setHabitHistoryDates(dates);
+  };
+
   if (loading) return <p>Loading...</p>;
 
   return (
@@ -147,6 +157,7 @@ export default function Home() {
               habit={habit}
               onToggle={handleUpdateHabit}
               onDelete={handleDeleteHabit}
+              onViewHistory={handleViewHistory}
             />
           );
         })}

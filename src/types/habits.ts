@@ -15,4 +15,5 @@ export type HabitProps = {
   habit: HabitWithTodayStatus;
   onToggle: (habitId: string, checked: boolean) => void;
   onDelete: (habitId: string) => void;
+  onViewHistory: (habitId: string) => void;
 };
