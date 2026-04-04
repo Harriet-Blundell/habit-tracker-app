@@ -17,3 +17,7 @@ export type HabitProps = {
   onDelete: (habitId: string) => void;
   onViewHistory: (habitId: string) => void;
 };
+
+export type ViewHistoryProps = {
+  onViewHistory: (habitId: string) => void;
+};
